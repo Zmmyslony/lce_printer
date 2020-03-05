@@ -45,13 +45,6 @@ def arch(d, slices):
     np.set_printoptions(precision = 5)
     return arcs
 
-
-def circle(z, R):
-    return np.sqrt(R ** 2 - z ** 2)
-
-def elipsoid(z, R, h):
-    return R * np.sqrt(1 - (z / h) ** 2)
-
 def opt(z_inc, fnc, z0):
     return (z_inc / dz) ** 2 + ((fnc(z0 - z_inc) - fnc(z0)) / dxy) ** 2 - 1
 

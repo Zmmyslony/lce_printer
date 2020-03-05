@@ -1,6 +1,7 @@
 from params import *
 from supp import *
 from func import *
+import shapes
 
 
 # ALL PRINTING PROCEDURES SHOULD START WITH INIT COMMAND AND END WITH CLOSE COMMAND
@@ -16,13 +17,13 @@ if 1:
 # 3D half sphere
 if 1:
     init(0, 10)
-    archim_3d(5, circle, [5])
+    archim_3d(5, shapes.circle, [5])
     close("half_shpere", 5, -8, 5, Tn = 0, s = 1)
 
 # 3D elipsoid
 if 1:
     init(0, 10)
-    archim_3d(7, elipsoid, [5, 7])
+    archim_3d(7, shapes.elipsoid, [5, 7])
     close("elipsoid", 5, -8, 5, Tn = 0, s = 1)
 
 # Staircase film with parallel orientation

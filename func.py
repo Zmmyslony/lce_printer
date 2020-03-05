@@ -58,20 +58,6 @@ def close(filename, x, y, z, Tn = 0, Tb = 0, s = 0):
     else:
         print("Generating aborted.")
 
-def wait(t, x, y):
-    global x_abs, y_abs
-    f = open(tfile, "a")
-    f.write("\nG04 \tS{} \n".format(t))
-    f.write("G91 \n")                             # switch to relative position mode
-    f.write("G01 \tX20 \tF{} \t E{}\n".format(v, 20 * ext)) # clean the nozzle
-    f.write("G01 \tZ1 \tF{}\n".format(vf))                              # move up
-    f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x - 20, y, vf))    # move to the starting position
-    f.write("G01 \tZ-1 \tF{}\n".format(vf))                             # lower to printing height
-    f.write("G90 \n")                               # switch to absolute printing mode
-    x_abs += x
-    y_abs += y
-    f.close()
-
 def clean(x, y):
     global x_abs, y_abs
     f = open(tfile, "a")
@@ -83,6 +69,13 @@ def clean(x, y):
     f.write("G91 \n")         # lower to printing height
     x_abs += x
     y_abs += y
+
+def wait(t, x, y):
+    global x_abs, y_abs
+    f = open(tfile, "a")
+    f.write("\nG04 \tS{} \n".format(t))
+    clean(x, y)
+    f.close()
 
 def rise(n = 1): # rise the nozzle by 1 layer
     global z_abs
