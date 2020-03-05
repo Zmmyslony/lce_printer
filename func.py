@@ -168,7 +168,7 @@ def archim(d, slices = 4, alpha = 0):   # print archimedes spiral approximation 
     f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x_abs + np.cos(alpha) * 0.5 * dxy, y_abs + np.sin(alpha) * 0.5 * dxy, vf))
     for i in range(arcs.shape[0]):
         s = arcs[i]
-        f.write("G03 \tX{:.2f} \tY{:.2f} \tF{} \tE{:.5f} \tI{:.2f} \tJ{:.2f}\n".format(s[0], s[1], v, s[4] * 2 / slices * math.pi, s[2], s[3]))
+        f.write("G03 \tX{:.2f} \tY{:.2f} \tF{} \tE{:.5f} \tI{:.2f} \tJ{:.2f}\n".format(s[0], s[1], v, ext * s[4] * 2 / slices * math.pi, s[2], s[3]))
     return len
 
 def archim_3d(h, fnc, args, slices = 4, alpha = 0):   # print archimedes spiral approximation starting at (x_abs, y_abs, z_abs)
@@ -189,7 +189,7 @@ def archim_3d(h, fnc, args, slices = 4, alpha = 0):   # print archimedes spiral 
     f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x_abs + np.cos(alpha) * arcs[0, 5], y_abs + np.sin(alpha) * arcs[0, 5], vf))
     for i in range(arcs.shape[0]):
         s = arcs[i]
-        f.write("G03 \tX{:.2f} \tY{:.2f} \tZ{:.2f} \tF{} \tE{:.5f} \tI{:.2f} \tJ{:.2f}\n".format(s[0], s[1], s[2], v, s[5] * 2 / slices * math.pi, s[3], s[4]))
+        f.write("G03 \tX{:.2f} \tY{:.2f} \tZ{:.2f} \tF{} \tE{:.5f} \tI{:.2f} \tJ{:.2f}\n".format(s[0], s[1], s[2], v, ext * s[5] * 2 / slices * math.pi, s[3], s[4]))
     return len
 
 def radial(d):

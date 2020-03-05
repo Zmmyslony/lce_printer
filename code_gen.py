@@ -16,9 +16,9 @@ if 1:
 
 # 3D half sphere
 if 1:
-    init(0, 10)
-    archim_3d(5, shapes.circle, [5])
-    close("half_shpere", 5, -8, 5, Tn = 0, s = 1)
+    init(10, 10, Tn = 105)
+    archim_3d(7, shapes.circle, [7])
+    close("half_shpere", -10, 30, 50, Tn = 0, s = 1)
 
 # 3D elipsoid
 if 1:
@@ -60,7 +60,7 @@ if 1:
     # rise()
     # move()
     # archim(15, alpha = 0.5)
-    close("archimedes", -5, 8, 5, Tn = 105, s = 1)
+    close("archimedes", -5, 8, 4.84, Tn = 105, s = 1)
 
 # 4 radial films with varying number of layers
 if 1:
