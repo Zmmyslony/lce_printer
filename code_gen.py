@@ -49,18 +49,18 @@ if 1:
 
 # 4 layers of archimedes spiral
 if 1:
-    init(-20, 10)
-    archim(15)
+    init(5, 8, Tn = 105)
+    archim(10)
     rise()
     move()
-    archim(15, alpha = 0.5)
-    rise()
-    move()
-    archim(15)
-    rise()
-    move()
-    archim(15, alpha = 0.5)
-    close("archimedes", 5, -8, 5, Tn = 0, s = 1)
+    archim(10, alpha = 0.5)
+    # rise()
+    # move()
+    # archim(15)
+    # rise()
+    # move()
+    # archim(15, alpha = 0.5)
+    close("archimedes", -5, 8, 5, Tn = 105, s = 1)
 
 # 4 radial films with varying number of layers
 if 1:
