@@ -1,6 +1,5 @@
-from params import *
-from supp import *
-from func import *
+from prints import *
+from utility import *
 import shapes
 
 
