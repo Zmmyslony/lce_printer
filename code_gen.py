@@ -1,5 +1,4 @@
 from prints import *
-from utility import *
 import shapes
 
 # ALL PRINTING PROCEDURES SHOULD START WITH INIT AND END WITH CLOSE FUNCTION

@@ -60,11 +60,11 @@ def lay_3d(h, fnc, args): # function used to calculate the layer heights and rad
     while c_z < h and not math.isnan(n_fnc(c_z)):
         sol = scipy.optimize.bisect(opt, 0, dz, args = (n_fnc, c_z)) # find next z
         c_z += sol
-        z_arr = np.append(h_arr, np.array(c_z))
+        z_arr = np.append(z_arr, np.array(c_z))
 
-    z_arr = np.reshape(h_arr, (1, h_arr.shape[0]))
-    z_r_arr = np.empty((h_arr.shape[0], 2))
-    z_r_arr = np.transpose(np.append(h_arr, n_fnc(h_arr), axis = 0))
+    z_arr = np.reshape(z_arr, (1, z_arr.shape[0]))
+    z_r_arr = np.empty((z_arr.shape[0], 2))
+    z_r_arr = np.transpose(np.append(z_arr, n_fnc(z_arr), axis = 0))
     z_r_arr = np.nan_to_num(z_r_arr)
     return z_r_arr
 
@@ -76,7 +76,7 @@ def arch_3d(h, fnc, args, slices):
     ox, oy = 0, 0
     z_r_slices = np.empty(((n - 1) * slices, 2))
     z_r_slices[0] = z_r[0]
-    
+
     for i in range(1, n):
         d_z_r = (z_r[i] - z_r[i - 1]) / slices
         for j in range(slices):

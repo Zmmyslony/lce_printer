@@ -11,7 +11,7 @@ dxy = 0.32      # Thickness of the line
 dz = 0.16       # Height of the layer
 
 vf = 1000       # Moving speed when not printing
-x_abs, y_abs, z_abs, l_tot = 0, 0, 0, 0
+
 
 # Theoretical nozzle parameters:
 res = 0.04 # movement resolution
