@@ -1,6 +1,8 @@
-import math
-import os
-import numpy as np
+# If working on Windows set working directory here. Finish the directory path with "/".
+# If working on Linux changing is not necessary. The files will be saved in the folder
+# where the scripts are.
+dir = ""
+tfile = "{}codes/temp.gcode".format(dir)
 
 # Nozzle parameters:
 ext = 0.002     # Extrusion multiplier per mm
@@ -9,6 +11,7 @@ dxy = 0.32      # Thickness of the line
 dz = 0.16       # Height of the layer
 
 vf = 1000       # Moving speed when not printing
+x_abs, y_abs, z_abs, l_tot = 0, 0, 0, 0
 
 # Theoretical nozzle parameters:
 res = 0.04 # movement resolution
@@ -23,13 +26,8 @@ dn = d23
 ds = 28.5
 fr = 25         # flow rate
 v_rate = 352.5  # parameter relating speed to nozzle diameter
-x_abs, y_abs, z_abs, l_tot = 0, 0, 0, 0
 
-# If working on Windows set working directory here. Finish the directory path with "/".
-# If working on Linux changing is not necessary. The files will be saved in the folder
-# where the scripts are.
-dir = ""
-tfile = "{}codes/temp.gcode".format(dir)
+
 # ext = fr * (dxy * dz) * 4 / (math.pi * ds ** 2) # extrusion multiplier assuming rectangular scrossection of the output and cylindrical shape of the syringe
 # v = int(dn ** 2 * v_rate)
 # dxy = res * int(dn / res)         # projecting nozzle diameter on printer resolution
