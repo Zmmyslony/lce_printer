@@ -43,11 +43,11 @@ def close(filename, x, y, z, Tn = 0, Tb = 0, s = 0):
     efile = "{}codes/{}.gcode".format(dir, filename)
     f.write("\n(Closing)\n")
     f.write("G01 \tX{:.2f} \tY{:.2f} \tZ{:.2f} \tF{}\n".format(x_abs + x, y_abs + y, z_abs + z, vf)) # move to the finishing position
-    f.write("M104 S{}".format(Tn))     # set nozzle temperature to Tn
-    f.write("M104 S{}".format(Tb))    # set bed temperature to Tb
+    f.write("M104 S{}\n".format(Tn))     # set nozzle temperature to Tn
+    f.write("M140 S{}\n".format(Tb))    # set bed temperature to Tb
     if not s:
         accept = ""
-        print("Total printing time will be around {:.1f} min. \nAccept? (y/n)".format(l / v))
+        print("Total printing time will be around {:.1f} min. \nAccept? (y/n)".format(l_tot / v))
         accept = input()
     if s or accept == "y" or accept == "Y":
         print("{} generated.".format(filename))
@@ -57,6 +57,32 @@ def close(filename, x, y, z, Tn = 0, Tb = 0, s = 0):
         os.rename(tfile, efile)    # rename the script to correct name
     else:
         print("Generating aborted.")
+
+def wait(t, x, y):
+    global x_abs, y_abs
+    f = open(tfile, "a")
+    f.write("\nG04 \tS{} \n".format(t))
+    f.write("G91 \n")                             # switch to relative position mode
+    f.write("G01 \tX20 \tF{} \t E{}\n".format(v, 20 * ext)) # clean the nozzle
+    f.write("G01 \tZ1 \tF{}\n".format(vf))                              # move up
+    f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x - 20, y, vf))    # move to the starting position
+    f.write("G01 \tZ-1 \tF{}\n".format(vf))                             # lower to printing height
+    f.write("G90 \n")                               # switch to absolute printing mode
+    x_abs += x
+    y_abs += y
+    f.close()
+
+def clean(x, y):
+    global x_abs, y_abs
+    f = open(tfile, "a")
+    f.write("G91 \n")                             # switch to relative position mode
+    f.write("G01 \tX20 \tF{} \t E{}\n".format(v, 20 * ext)) # clean the nozzle
+    f.write("G01 \tZ1 \tF{}\n".format(vf))          # move up
+    f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x - 20, y, vf))  # move to the starting position
+    f.write("G01 \tZ-1 \tF{}\n".format(vf))         # lower to printing height
+    f.write("G91 \n")         # lower to printing height
+    x_abs += x
+    y_abs += y
 
 def rise(n = 1): # rise the nozzle by 1 layer
     global z_abs
@@ -75,16 +101,17 @@ def move(x = 0, y = 0, z = 0):  # move nozzle by (x, y, z)
     y_abs += y
     f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x_abs, y_abs, vf))  # move (x, y, 0)
     z_abs += z
-    f.write("G01 \tZ{:.2f} \tF{}".format(z_abs, vf)) # move z - 5 mm in z direction
+    f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs, vf)) # move z - 5 mm in z direction
 
-def set_abs(x = x_abs, y = y_abs, z = z_abs): # set the starting position of next shape to (x, y, z)
+
+def set_abs(x, y, z): # set the starting position of next shape to (x, y, z)
     global x_abs, y_abs, z_abs
     f = open(tfile, "a")
     f.write("\n(Setting position to {}, {}, {})\n".format(x, y, z))
     f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs + 1, vf))
     x_abs, y_abs, z_abs = x, y, z
     f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x_abs, y_abs, vf))
-    f.write("G01 \tZ{:.2f} \tF{}".format(z_abs, vf))
+    f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs, vf))
 
 def film(l, w, d): # print film with parallel orientation in x axis
     global x_abs, y_abs, z_abs, l_tot
@@ -96,6 +123,7 @@ def film(l, w, d): # print film with parallel orientation in x axis
     f = open(tfile, "a")
     f.write("\n(Printing film of dimensions {:.2f} x {:.2f} x {:.2f})\n".format(l, 2 * lin * dxy, lay * dz))
     f.write("G90 \n")
+    f.write("M83 \n")
     for i in range(lay):
         for j in range(lin):
             f.write("G01 \tX{:.2f} \tF{} \tE{:.5f} \n".format(x_abs + l, v, l * ext))
@@ -121,6 +149,7 @@ def conc(d): # print concentric circles starting at (x_abs, y_abs, z_abs)
     f = open(tfile, "a")
     f.write("\n(Printing concentric circles of diameter {:.2f})\n".format(2 * (n + 1) * dxy))
     f.write("G90 \n")
+    f.write("M83 \n")
     f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x_abs, y_abs, vf))
     for i in range(n + 1):
         r_temp = (i + 0.5) * dxy
@@ -142,6 +171,7 @@ def archim(d, slices = 4, alpha = 0):   # print archimedes spiral approximation 
 
     f.write("\n(Printing archimedes spiral of diameter {:.2f})\n".format(d))
     f.write("G90 \n")
+    f.write("M83 \n")
     f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x_abs + np.cos(alpha) * 0.5 * dxy, y_abs + np.sin(alpha) * 0.5 * dxy, vf))
     for i in range(arcs.shape[0]):
         s = arcs[i]
@@ -162,6 +192,7 @@ def archim_3d(h, fnc, args, slices = 4, alpha = 0):   # print archimedes spiral 
 
     f.write("\n(Printing archimedes spiral of height {:.2f})\n".format(h))
     f.write("G90 \n")
+    f.write("M83 \n")
     f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x_abs + np.cos(alpha) * arcs[0, 5], y_abs + np.sin(alpha) * arcs[0, 5], vf))
     for i in range(arcs.shape[0]):
         s = arcs[i]
@@ -178,6 +209,7 @@ def radial(d):
     f = open(tfile, "a")
     f.write("\n(Printing radial pattern of diameter {:.2f})\n".format(d))
     f.write("G90 \n")
+    f.write("M83 \n")
     f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs + 1, vf))
     for i in range(lines.shape[0]):
         f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(lines[i, 1], lines[i, 2], vf))

@@ -5,6 +5,14 @@ from func import *
 
 # ALL PRINTING PROCEDURES SHOULD START WITH INIT COMMAND AND END WITH CLOSE COMMAND
 
+if 1:
+    init(0, 5, Tn = 0, Tb = 85)
+    for i in range(5):
+        film(20, 5, 2)
+        set_abs(0, 10 * i + 7, 0)
+        wait(7200, 0, 3)
+    close("Ji", 0, 10, 10, Tb = 85, s = 1)
+
 # 3D half sphere
 if 1:
     init(0, 10)
@@ -14,16 +22,17 @@ if 1:
 # 3D elipsoid
 if 1:
     init(0, 10)
-    archim_3d(2, elipsoid, [7, 2])
+    archim_3d(7, elipsoid, [5, 7])
     close("elipsoid", 5, -8, 5, Tn = 0, s = 1)
 
 # Staircase film with parallel orientation
 if 1:
-    init(0, 2, Tn = 90)
-    for i in range(10):
-        film(20 - 2 * i, 4, 0.16)
-    set_abs(z = 0)
-    close("staircase", 25, -2, 0, s = 1, Tn = 90)
+    init(0, 2, Tn = 105)
+    n = 8
+    for i in range(n):
+        film((n - i)* 2, 4, 0.16)
+    set_abs(0, 0, 0)
+    close("staircase", 25, -2, 50, s = 1, Tn = 105)
 
 # Film with parallel orientation
 if 1:

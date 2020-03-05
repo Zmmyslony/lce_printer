@@ -4,7 +4,6 @@ import numpy as np
 import scipy
 from scipy import optimize
 from params import *
-from func import *
 
 def rad(d):
     mult = 2 * math.pi
@@ -99,5 +98,3 @@ def arch_3d(h, fnc, args, slices):
         oy += dxy / slices * np.sin(ang_step * (i + 1))
     np.set_printoptions(precision = 5)
     return arcs
-
-#archim_3d(6, circle, [6], 4)
