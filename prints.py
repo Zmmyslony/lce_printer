@@ -98,7 +98,6 @@ def move(x = 0, y = 0, z = 0):  # move nozzle by (x, y, z)
     y_abs += y
     z_abs += z
 
-
 def set_abs(x, y, z): # set the starting position of next shape to (x, y, z)
     global x_abs, y_abs, z_abs
 
@@ -216,8 +215,8 @@ def archim_3d(h, fnc, args, slices = 4, alpha = 0):     # print 3D archimedes sp
 
 def radial(d):
     global x_abs, y_abs, z_abs, l_tot
-    lines = supp.rad(d)
-    lines += np.reshape(np.array([0, x_abs, y_abs, x_abs, y_abs]), (1, 5))
+    lines = supp.rad(d)                                                                 # calculate all the lines
+    lines += np.reshape(np.array([0, x_abs, y_abs, x_abs, y_abs]), (1, 5))              # move to the x_abs, y_abs position
     len = np.sqrt((lines[:, 1] - lines[:, 3]) ** 2 + (lines[:, 2] - lines[:, 4]) ** 2)  # calculate the length of each of the lines
     l_tot += np.sum(len)                                                                # calculate total printing length
 

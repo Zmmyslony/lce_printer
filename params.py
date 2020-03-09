@@ -6,9 +6,9 @@ tfile = "{}codes/temp.gcode".format(dir)
 
 # Nozzle parameters:
 ext = 0.002     # Extrusion multiplier per mm
-v = 20          # Moving speed when priting
+v = 40          # Moving speed when priting
 dxy = 0.32      # Thickness of the line
-dz = 0.16       # Height of the layer
+dz = 0.2       # Height of the layer
 
 vf = 1000       # Moving speed when not printing
 
