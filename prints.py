@@ -5,20 +5,20 @@ from params import *
 
 x_abs, y_abs, z_abs, l_tot = 0, 0, 0, 0
 
-def clean(x, y):
+def clean(x, y, v = v0):
     global x_abs, y_abs
     f = open(tfile, "a")
     f.write("G91 \n")                                       # switch to relative position mode
-    f.write("G01 \tX20 \tF{} \t E{}\n".format(v, 20 * ext)) # clean the nozzle
+    f.write("G01 \tX30 \tF{} \t E{}\n".format(v, 20 * ext)) # clean the nozzle
     f.write("G01 \tZ1 \tF{}\n".format(vf))                  # move up
-    f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x - 20, y, vf))  # move to the starting position
+    f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(x - 30, y, vf))  # move to the starting position
     f.write("G01 \tZ-1 \tF{}\n".format(vf))                 # lower to printing height
     f.write("G90 \n")
     f.close()
     x_abs += x
     y_abs += y
 
-def init(x, y, Tn = 90, Tb = 0):                    # Initialization of the printing procedure. All printing processes should start with this function
+def init(x, y, Tn = 90, Tb = 0, v = v0):                    # Initialization of the printing procedure. All printing processes should start with this function
     global x_abs, y_abs, z_abs, l_tot
     if not os.path.isdir("{}codes".format(dir)):    # make the code folder in the working directory
         os.mkdir("{}codes".format(dir))
@@ -40,7 +40,7 @@ def init(x, y, Tn = 90, Tb = 0):                    # Initialization of the prin
     f.write("G92 \tX0 \tY0 \tZ0\n")                 # set current position as (0, 0, 0) coordinate
     f.write("G90\n")                                # switch to absolute positon mode
 
-def close(filename, x, y, z, Tn = 0, Tb = 0, s = 0):
+def close(filename, x, y, z, Tn = 0, Tb = 0, s = 0, v = v0):
     f = open(tfile, "a")
 
     efile = "{}codes/{}.gcode".format(dir, filename)
@@ -110,7 +110,7 @@ def set_abs(x, y, z): # set the starting position of next shape to (x, y, z)
 
     x_abs, y_abs, z_abs = x, y, z
 
-def film(l, w, h): # print film with parallel orientation in x axis
+def film(l, w, h, v = v0): # print film with parallel orientation in x axis
     global x_abs, y_abs, z_abs, l_tot
     y0 = y_abs
     lin = int(math.ceil(w / (2 * dxy)))
@@ -141,7 +141,7 @@ def film(l, w, h): # print film with parallel orientation in x axis
     f.close()
     return len
 
-def conc(d):        # outdated function; archim is the better one; print concentric circles starting at (x_abs, y_abs, z_abs)
+def conc(d, v = v0):        # outdated function; archim is the better one; print concentric circles starting at (x_abs, y_abs, z_abs)
     global x_abs, y_abs, z_abs, l_tot
 
     n = int(math.ceil((d - 2 * dxy) / (2 * dxy)))
@@ -163,7 +163,7 @@ def conc(d):        # outdated function; archim is the better one; print concent
     f.close()
     return len
 
-def archim(d, slices = 4, alpha = 0):   # print archimedes spiral approximation starting at (x_abs, y_abs, z_abs)
+def archim(d, slices = 4, alpha = 0, v = v0):   # print archimedes spiral approximation starting at (x_abs, y_abs, z_abs)
     global x_abs, y_abs, z_abs, l_tot
     a = 2 * math.pi * alpha
     arcs = supp.arch(d, slices)
@@ -188,7 +188,7 @@ def archim(d, slices = 4, alpha = 0):   # print archimedes spiral approximation 
     f.close()
     return len
 
-def archim_3d(h, fnc, args, slices = 4, alpha = 0):     # print 3D archimedes spiral approximation starting at (x_abs, y_abs, z_abs)
+def archim_3d(h, fnc, args, slices = 4, alpha = 0, v = v0):     # print 3D archimedes spiral approximation starting at (x_abs, y_abs, z_abs)
     global x_abs, y_abs, z_abs, l_tot
     a = 2 * math.pi * alpha                             # calculate standard angle from normalized one
     arcs = supp.arch_3d(h, fnc, args, slices)           # calculate archimedes spiral starting at (0, 0) coordinates by cutting each circle into slices
@@ -213,7 +213,7 @@ def archim_3d(h, fnc, args, slices = 4, alpha = 0):     # print 3D archimedes sp
     f.close()
     return len
 
-def radial(d):
+def radial(d, v = v0):
     global x_abs, y_abs, z_abs, l_tot
     lines = supp.rad(d)                                                                 # calculate all the lines
     lines += np.reshape(np.array([0, x_abs, y_abs, x_abs, y_abs]), (1, 5))              # move to the x_abs, y_abs position
@@ -226,10 +226,14 @@ def radial(d):
     f.write("M83 \n")
     f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs + 1, vf))
 
-    for i in range(lines.shape[0]):
-        f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(lines[i, 1], lines[i, 2], vf))
+    for i in range(int(lines.shape[0] / 2)):
+        f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(lines[2 * i, 3], lines[2 * i, 4], vf))
         f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs, vf))
-        f.write("G01 \tX{:.2f} \tY{:.2f} \tF{} \tE{:.5f}\n".format(lines[i, 3], lines[i, 4], v, len[i] * ext))
+        f.write("G01 \tX{:.2f} \tY{:.2f} \tF{} \tE{:.5f}\n".format(lines[2 * i, 1], lines[2 * i, 2], v, len[i] * ext))
+        f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs + 1, vf))
+        f.write("G01 \tX{:.2f} \tY{:.2f} \tF{}\n".format(lines[2 * i + 1, 1], lines[2 * i + 1, 2], vf))
+        f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs, vf))
+        f.write("G01 \tX{:.2f} \tY{:.2f} \tF{} \tE{:.5f}\n".format(lines[2 * i + 1, 3], lines[2 * i + 1, 4], v, len[i] * ext))
         f.write("G01 \tZ{:.2f} \tF{}\n".format(z_abs + 1, vf))
     f.close()
     return np.sum(len)

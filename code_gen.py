@@ -19,7 +19,7 @@ if 1:
 
 # Staircase film with parallel orientation
 if 1:
-    init(0, 2, Tn = 105)
+    init(0, 2, Tn = 90)
     n = 8
     for i in range(n):
         film((n - i)* 2, 4, 0.16)
@@ -28,9 +28,9 @@ if 1:
 
 # Film with parallel orientation
 if 1:
-    init(0, 20)
-    film(30, 5, 3)
-    close("parallel", 0, -20, 20, s = 1)
+    init(0, 5, Tn = 90)
+    film(40, 5, 0.3)
+    close("parallel", 0, -5, 20, s = 1)
 
 # Single concentric circles layer
 if 1:
@@ -55,39 +55,44 @@ if 1:
 
 # 4 radial films with varying number of layers
 if 1:
-    init(0, 10)
-    radial(15)
+    init(30, 15, Tn = 90)
+    radial(15, v = 30)
 
-    move(x = 20)
-    radial(15)
-    rise()
-    radial(15)
+    move(x = -20)
+    archim(15, v = 60)
+    close("radial_archi", 0, 10, 20, s = 1)
 
-    # move(y = 20, z = -dz)
-    # radial(15)
-    # rise()
-    # radial(15)
-    # rise()
-    # radial(15)
-    #
-    # move(x = -20, z = -2 * dz)
-    # radial(15)
-    # rise()
-    # radial(15)
-    # rise()
-    # radial(15)
-    # rise()
-    # radial(15)
+if 1:
+    init(25, 10, Tn = 90)
+    archim(15, v = 30, alpha = 0.5)
 
-    close("radial_quad", 0, 10, 20, s = 1)
+    move(x = -17)
+    archim(15, v = 40, alpha = 0.75)
 
+    move(y = 17)
+    archim(15, v = 50)
+    close("archi_speed_30_40_50", 17, 0, 20, s = 1)
+
+if 1:
+    init(8, 10, Tn = 90)
+    radial(15, v = 40)
+
+    move(y = 17)
+    radial(15, v = 50)
+
+    move(x = 17)
+    radial(15, v = 60)
+
+    move(x = 17)
+    radial(15, v = 80)
+    close("rad_speed_40_50_60_80", 0, 10, 20, s = 1)
 # Radinoid
 if 1:
-    init(0, 20)
-    archim(20)
+    init(10, 10, Tn = 90)
+    archim(15)
     rise()
-    radial(20)
-    close("radinoid", 0, -20, 20, s = 1)
+    radial(15)
+    close("radinoid", -10, 10, 20, s = 1)
 
 # Test from 27th of Feb 2020; checking double layered combinations of circular films
 if 1:
