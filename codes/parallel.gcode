@@ -1,7 +1,7 @@
 (Initialization)
-M104 	S90
+M104 	S50
 M140 	S0
-M109 	S90
+M109 	S50
 M190 	S0
 G91 
 G01 	X30 	F40 	 E0.04

@@ -5,16 +5,15 @@ dir = ""
 tfile = "{}codes/temp.gcode".format(dir)
 
 # Nozzle parameters:
-ext = 0.002     # Extrusion multiplier per mm
-v0 = 40          # Moving speed when priting
-dxy = 0.32      # Thickness of the line
-dz = 0.2       # Height of the layer
+ext = 0.002  # Extrusion multiplier per mm
+v0 = 40  # Moving speed when priting
+dxy = 0.32  # Thickness of the line
+dz = 0.2  # Height of the layer
 
-vf = 1000       # Moving speed when not printing
-
+vf = 1000  # Moving speed when not printing
 
 # Theoretical nozzle parameters:
-res = 0.04 # movement resolution
+res = 0.04  # movement resolution
 
 # Birmingham gauge needle diameters:
 d19, d20, d21, d22 = 0.686, 0.603, 0.514, 0.413
@@ -24,11 +23,11 @@ d29 = 0.184
 
 dn = d23
 ds = 28.5
-fr = 25         # flow rate
+fr = 25  # flow rate
 v_rate = 352.5  # parameter relating speed to nozzle diameter
 
-
-# ext = fr * (dxy * dz) * 4 / (math.pi * ds ** 2) # extrusion multiplier assuming rectangular scrossection of the output and cylindrical shape of the syringe
+# ext = fr * (dxy * dz) * 4 / (math.pi * ds ** 2) # extrusion multiplier assuming rectangular scrossection of the
+#   output and cylindrical shape of the syringe
 # v = int(dn ** 2 * v_rate)
 # dxy = res * int(dn / res)         # projecting nozzle diameter on printer resolution
 # dz = res * int(dn / (2 * res))    # projecting nozzle radius on printer resolution
